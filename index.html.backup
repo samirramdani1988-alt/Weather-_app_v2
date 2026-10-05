@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>طقس تلمسان</title>
+<style>
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background: linear-gradient(180deg, #1976d2, #64b5f6);
+  color: white;
+  min-height: 100vh;
+}
+.container {
+  max-width: 500px;
+  margin: auto;
+  padding: 25px 18px;
+}
+h1 {
+  text-align: center;
+  margin-bottom: 25px;
+}
+.card {
+  background: rgba(255,255,255,0.18);
+  border-radius: 22px;
+  padding: 22px;
+  margin-bottom: 15px;
+  text-align: center;
+  backdrop-filter: blur(8px);
+}
+.temp {
+  font-size: 64px;
+  font-weight: bold;
+}
+.city {
+  font-size: 28px;
+}
+.info {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+.info div {
+  font-size: 16px;
+}
+.forecast {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.day {
+  background: rgba(255,255,255,0.15);
+  border-radius: 15px;
+  padding: 12px 5px;
+  text-align: center;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h1>🌤️ تطبيق الطقس</h1>
+
+<div class="card">
+  <div class="city">تلمسان</div>
+  <div>الجزائر</div>
+  <div class="temp">--°</div>
+  <div>جاري تحميل حالة الطقس...</div>
+
+  <div class="info">
+    <div>💧 الرطوبة<br>--%</div>
+    <div>💨 الرياح<br>-- كم/س</div>
+    <div>🌡️ المحسوسة<br>--°</div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>التوقعات القادمة</h2>
+
+  <div class="forecast">
+    <div class="day">اليوم<br>🌤️<br>--°</div>
+    <div class="day">غدًا<br>☀️<br>--°</div>
+    <div class="day">بعد غد<br>🌧️<br>--°</div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>طقس تلمسان</h3>
+  <p>نشرة جوية مبسطة ودقيقة</p>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>طقس تلمسان</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(180deg, #1565c0, #64b5f6);
+  color: white;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 520px;
+  margin: auto;
+  padding: 20px 15px;
+}
+
+h1 {
+  text-align: center;
+  margin: 10px 0 25px;
+}
+
+.card {
+  background: rgba(255,255,255,0.18);
+  border-radius: 22px;
+  padding: 20px;
+  margin-bottom: 15px;
+  text-align: center;
+  backdrop-filter: blur(8px);
+}
+
+.city {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.country {
+  opacity: 0.9;
+  margin-bottom: 10px;
+}
+
+.weather-icon {
+  font-size: 60px;
+  margin: 10px;
+}
+
+.temp {
+  font-size: 64px;
+  font-weight: bold;
+}
+
+.description {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.info {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.info-box {
+  background: rgba(255,255,255,0.12);
+  border-radius: 15px;
+  padding: 12px 5px;
+  font-size: 14px;
+}
+
+.info-value {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.status {
+  text-align: center;
+  padding: 10px;
+  font-size: 14px;
+}
+
+button {
+  border: 0;
+  border-radius: 12px;
+  padding: 12px 25px;
+  font-size: 16px;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🌤️ تطبيق الطقس</h1>
+
+<div class="card">
+
+  <div class="city">تلمسان</div>
+  <div class="country">الجزائر</div>
+
+  <div class="weather-icon" id="icon">⏳</div>
+
+  <div class="temp" id="temperature">--°</div>
+
+  <div class="description" id="description">
+    جاري تحميل حالة الطقس...
+  </div>
+
+  <div class="info">
+
+    <div class="info-box">
+      💧 الرطوبة
+      <div class="info-value" id="humidity">--%</div>
+    </div>
+
+    <div class="info-box">
+      🌡️ المحسوسة
+      <div class="info-value" id="apparent">--°</div>
+    </div>
+
+    <div class="info-box">
+      💨 الرياح
+      <div class="info-value" id="wind">-- كم/س</div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="card">
+  <div id="update">جاري تحديث البيانات...</div>
+  <br>
+  <button onclick="loadWeather()">🔄 تحديث</button>
+</div>
+
+<div class="card">
+  <h3>طقس تلمسان</h3>
+  <p>بيانات جوية مباشرة من Open-Meteo</p>
+</div>
+
+</div>
+
+<script>
+
+const latitude = 34.8828;
+const longitude = -1.3167;
+
+function weatherDescription(code) {
+
+  const descriptions = {
+    0: ["☀️", "سماء صافية"],
+    1: ["🌤️", "غالبًا صافٍ"],
+    2: ["⛅", "غائم جزئيًا"],
+    3: ["☁️", "غائم"],
+    45: ["🌫️", "ضباب"],
+    48: ["🌫️", "ضباب متجمد"],
+    51: ["🌦️", "رذاذ خفيف"],
+    53: ["🌦️", "رذاذ متوسط"],
+    55: ["🌧️", "رذاذ كثيف"],
+    61: ["🌧️", "مطر خفيف"],
+    63: ["🌧️", "مطر متوسط"],
+    65: ["🌧️", "مطر غزير"],
+    71: ["🌨️", "ثلوج خفيفة"],
+    73: ["🌨️", "ثلوج متوسطة"],
+    75: ["❄️", "ثلوج غزيرة"],
+    80: ["🌦️", "زخات مطر"],
+    81: ["🌦️", "زخات مطر متوسطة"],
+    82: ["⛈️", "زخات مطر غزيرة"],
+    95: ["⛈️", "عاصفة رعدية"],
+    96: ["⛈️", "عاصفة مع برد"],
+    99: ["⛈️", "عاصفة قوية مع برد"]
+  };
+
+  return descriptions[code] || ["🌤️", "حالة جوية غير معروفة"];
+}
+
+async function loadWeather() {
+
+  document.getElementById("update").textContent =
+    "جاري تحديث البيانات...";
+
+  try {
+
+    const url =
+      "https://api.open-meteo.com/v1/forecast" +
+      "?latitude=" + latitude +
+      "&longitude=" + longitude +
+      "&current=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,weather_code" +
+      "&timezone=auto";
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error("API error");
+    }
+
+    const data = await response.json();
+
+    const current = data.current;
+
+    const weather = weatherDescription(current.weather_code);
+
+    document.getElementById("icon").textContent =
+      weather[0];
+
+    document.getElementById("description").textContent =
+      weather[1];
+
+    document.getElementById("temperature").textContent =
+      Math.round(current.temperature_2m) + "°C";
+
+    document.getElementById("humidity").textContent =
+      current.relative_humidity_2m + "%";
+
+    document.getElementById("apparent").textContent =
+      Math.round(current.apparent_temperature) + "°C";
+
+    document.getElementById("wind").textContent =
+      Math.round(current.wind_speed_10m) + " كم/س";
+
+    document.getElementById("update").textContent =
+      "آخر تحديث: " + current.time.replace("T", " ");
+
+  } catch (error) {
+
+    document.getElementById("description").textContent =
+      "تعذر تحميل بيانات الطقس";
+
+    document.getElementById("update").textContent =
+      "تحقق من اتصال الإنترنت";
+
+    console.log(error);
+  }
+}
+
+loadWeather();
+
+</script>
+
+</body>
+</html>
